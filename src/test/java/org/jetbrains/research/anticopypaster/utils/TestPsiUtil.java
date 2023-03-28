@@ -1,4 +1,4 @@
 package org.jetbrains.research.anticopypaster.utils;
 
-public class PsiUtilTest {
+public class TestPsiUtil {
 }
