@@ -1,5 +1,6 @@
 package org.jetbrains.research.anticopypaster.models;
 
+import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,18 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 
 
-public class UserSettingsModelTest {
+public class UserSettingsModelTest extends LightJavaCodeInsightFixtureTestCase {
+    /**
+     * Overridden from LightJavaCodeInsightFixtureTestCase. Setup now also ensures
+     * the project is initialized fully and adds the testdata to the project.
+     * @throws Exception
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        while (!getProject().isInitialized());
+        model = new UserSettingsModel(null);
+    }
 
     /**
     Inner class to mock a FeaturesVector, should only need buildArray() for this
@@ -83,23 +95,13 @@ public class UserSettingsModelTest {
     private UserSettingsModel model;
 
     /**
-    Create a new model before each test
-     */
-    @BeforeEach
-    public void beforeTest(){
-        model = new UserSettingsModel(null);
-    }
-
-    /**
     This is a test to make sure that if the model has a null metrics
     gatherer that it will always return 0 (do not pop-up)
      */
-    @Test
     public void testPredictEverythingNull(){
         assertEquals(model.predict(null), 0, 0);
     }
 
-    @Test
     public void testPredictEverythingOff(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -142,7 +144,6 @@ public class UserSettingsModelTest {
     flag tests are passing, it is an issue within the model.
     
      */
-    @Test
     public void testPredictOnlySizeOnSensOneTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -192,7 +193,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlySizeOnSensOneFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -242,7 +242,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlySizeOnSensTwoTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -292,7 +291,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlySizeOnSensTwoFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -342,7 +340,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlySizeOnSensThreeTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -392,7 +389,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlySizeOnSensThreeFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -442,7 +438,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensOneTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -486,7 +481,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensOneFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -530,7 +524,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensTwoTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -574,7 +567,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensTwoFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -618,7 +610,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensThreeTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -662,7 +653,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyComplexityOnSensThreeFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -706,7 +696,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensOneTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -741,7 +730,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensOneFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -776,7 +764,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensTwoTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -811,7 +798,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensTwoFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -846,7 +832,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensThreeTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -881,7 +866,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictOnlyKeywordsOnSensThreeFalse(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -916,7 +900,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictSizeComplexityTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -978,7 +961,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictSizeComplexityFalseOneValue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1040,7 +1022,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictSizeComplexityFalseBothValues(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1102,7 +1083,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictSizeKeywordsTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1163,7 +1143,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictSizeKeywordsFalseOneValue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1224,7 +1203,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictSizeKeywordsFalseBothValues(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1285,7 +1263,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictComplexityKeywordsTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1335,7 +1312,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictComplexityKeywordsFalseOneValue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1385,7 +1361,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictComplexityKeywordsFalseBothValues(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1435,7 +1410,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictAllFlagsTrue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1503,7 +1477,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 1, 0);
     }
 
-    @Test
     public void testPredictAllFlagsFalseOneValue(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1571,7 +1544,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictAllFlagsFalseTwoValues(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -1639,7 +1611,6 @@ public class UserSettingsModelTest {
         assertEquals(model.predict(passedInFv.getMock()), 0, 0);
     }
 
-    @Test
     public void testPredictAllFlagsFalseThreeValues(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
