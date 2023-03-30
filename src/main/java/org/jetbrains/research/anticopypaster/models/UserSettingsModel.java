@@ -75,7 +75,7 @@ public class UserSettingsModel extends PredictionModel{
 
     /**
     Defaulted to medium if the user has not set up flag values,reads in
-     whatever the sensitivities are from the frontend if the user has set values
+     the sensitivities from the frontend file if the user has set values
     */
     private void readSensitivitiesFromFrontend(){
         //Default values if the user has not yet specified flag values
@@ -96,11 +96,11 @@ public class UserSettingsModel extends PredictionModel{
                 String complexityDropdownValue = scanner.nextLine();
                 String complexityCheckboxValue = scanner.nextLine();
 
-                keywordsSensFromFrontend = sensitivityInteger(keywordsDropdownValue);
-                sizeSensFromFrontend = sensitivityInteger(sizeDropdownValue);
-                complexitySensFromFrontend = sensitivityInteger(complexityDropdownValue);
+                keywordsSensFromFrontend = customModelController.parseSettingString(keywordsDropdownValue);
+                sizeSensFromFrontend = customModelController.parseSettingString(sizeDropdownValue);
+                complexitySensFromFrontend = customModelController.parseSettingString(complexityDropdownValue);
             } catch (FileNotFoundException ex) {
-                // Handle file not found exception
+                System.out.println(ex);
             }
         }
 
@@ -109,23 +109,6 @@ public class UserSettingsModel extends PredictionModel{
         setComplexitySensitivity(complexitySensFromFrontend);
     }
 
-    /**
-     * Translates the flag sensitivity from a string to an int
-     * @param sensitivity - String version of the flag sensitivity
-     * @return - Integer of the string value given
-     */
-    private int sensitivityInteger(String sensitivity){
-        if(sensitivity.equals("Off")){
-            return 0;
-        } else if (sensitivity.equals("Low")) {
-            return 1;
-        } else if (sensitivity.equals("Medium")) {
-            return 2;
-        } else if (sensitivity.equals("High")) {
-            return 3;
-        }
-        return 0; //Returns off or 0 if there is not one of the four options above
-    }
     /**
     This just gets the count of how many flags are not turned off
      */
