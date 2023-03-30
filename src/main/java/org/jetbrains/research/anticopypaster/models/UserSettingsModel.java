@@ -68,7 +68,6 @@ public class UserSettingsModel extends PredictionModel{
     }
 
     public void setSizeSensitivity(int sensitivity){
-        System.out.println("We are changing the size sensitivity");
         this.sizeSensitivity = sensitivity;
         this.sizeMetrics.changeSensitivity(sensitivity);
     }    
