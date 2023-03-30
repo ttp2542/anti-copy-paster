@@ -10,12 +10,16 @@ public final class CustomModelController {
     private static final CustomModelController INSTANCE = new CustomModelController();
     private UserSettingsModel userSettingsModel;
 
-    public CustomModelController(){
+    private CustomModelController(){
 
     }
 
     public static CustomModelController getInstance(){
         return INSTANCE;
+    }
+
+    public void setUserSettingsModel(UserSettingsModel userSettingsModel){
+        this.userSettingsModel = userSettingsModel;
     }
 
     public void changeSettings(CustomMetricsModel customMetricsModel){

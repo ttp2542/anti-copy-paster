@@ -1,6 +1,7 @@
 package org.jetbrains.research.anticopypaster.models;
 
 import com.intellij.openapi.project.ProjectManager;
+import org.jetbrains.research.anticopypaster.controller.CustomModelController;
 import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
 import org.jetbrains.research.anticopypaster.utils.KeywordsMetrics;
@@ -19,6 +20,8 @@ public class UserSettingsModel extends PredictionModel{
             .getBasePath() + "/.idea/custom_metrics.txt";
     private MetricsGatherer metricsGatherer;
 
+    private CustomModelController customModelController = CustomModelController.getInstance();
+
     private Flag keywordsMetrics;
     private Flag sizeMetrics;
     private Flag complexityMetrics;
@@ -34,6 +37,7 @@ public class UserSettingsModel extends PredictionModel{
         if(mg != null){
             initMetricsGathererAndMetricsFlags(mg);
         }
+        customModelController.setUserSettingsModel(this);
     }
 
     /**
@@ -64,6 +68,7 @@ public class UserSettingsModel extends PredictionModel{
     }
 
     public void setSizeSensitivity(int sensitivity){
+        System.out.println("We are changing the size sensitivity");
         this.sizeSensitivity = sensitivity;
         this.sizeMetrics.changeSensitivity(sensitivity);
     }    
