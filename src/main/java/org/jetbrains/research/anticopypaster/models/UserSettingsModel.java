@@ -1,16 +1,22 @@
 package org.jetbrains.research.anticopypaster.models;
 
+import com.intellij.openapi.project.ProjectManager;
 import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
 import org.jetbrains.research.anticopypaster.utils.KeywordsMetrics;
 import org.jetbrains.research.anticopypaster.utils.SizeMetrics;
 import org.jetbrains.research.anticopypaster.utils.ComplexityMetrics;
 import org.jetbrains.research.anticopypaster.utils.Flag;
+
+import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class UserSettingsModel extends PredictionModel{
 
+    private static final String FILE_PATH = ProjectManager.getInstance().getOpenProjects()[0]
+            .getBasePath() + "/.idea/custom_metrics.txt";
     private MetricsGatherer metricsGatherer;
 
     private Flag keywordsMetrics;
@@ -23,7 +29,7 @@ public class UserSettingsModel extends PredictionModel{
 
     public UserSettingsModel(MetricsGatherer mg){
         //The metricsGatherer instantiation calls a function that can't be used
-        //outside of the context of an installed plugin, so in order to unit test
+        //outside the context of an installed plugin, so in order to unit test
         //our model, the metrics gatherer is passed in from the constructor
         if(mg != null){
             initMetricsGathererAndMetricsFlags(mg);
@@ -63,20 +69,58 @@ public class UserSettingsModel extends PredictionModel{
     }    
 
     /**
-    Currently stubbed out to default to medium sens
-    This should ideally read in whatever the sensitivities are from the frontend,
-    the frontend 
+    Defaulted to medium if the user has not set up flag values,reads in
+     whatever the sensitivities are from the frontend if the user has set values
     */
     private void readSensitivitiesFromFrontend(){
+        //Default values if the user has not yet specified flag values
+        int keywordsSensFromFrontend = 2;
         int sizeSensFromFrontend = 2;
         int complexitySensFromFrontend = 2;
-        int keywordsSensFromFrontend = 2;
 
-        setComplexitySensitivity(complexitySensFromFrontend);
-        setSizeSensitivity(sizeSensFromFrontend);
+        //Grabs the sensitivity of the flags from the file if the file exists
+        File file = new File(FILE_PATH);
+        if (file.exists()) {
+            try (Scanner scanner = new Scanner(file)) {
+                //throw away first line
+                scanner.nextLine();
+                String keywordsDropdownValue = scanner.nextLine();
+                String keywordsCheckboxValue = scanner.nextLine();
+                String sizeDropdownValue = scanner.nextLine();
+                String sizeCheckboxValue = scanner.nextLine();
+                String complexityDropdownValue = scanner.nextLine();
+                String complexityCheckboxValue = scanner.nextLine();
+
+                keywordsSensFromFrontend = sensitivityInteger(keywordsDropdownValue);
+                sizeSensFromFrontend = sensitivityInteger(sizeDropdownValue);
+                complexitySensFromFrontend = sensitivityInteger(complexityDropdownValue);
+            } catch (FileNotFoundException ex) {
+                // Handle file not found exception
+            }
+        }
+
         setKeywordsSensitivity(keywordsSensFromFrontend);
+        setSizeSensitivity(sizeSensFromFrontend);
+        setComplexitySensitivity(complexitySensFromFrontend);
     }
 
+    /**
+     * Translates the flag sensitivity from a string to an int
+     * @param sensitivity - String version of the flag sensitivity
+     * @return - Integer of the string value given
+     */
+    private int sensitivityInteger(String sensitivity){
+        if(sensitivity.equals("Off")){
+            return 0;
+        } else if (sensitivity.equals("Low")) {
+            return 1;
+        } else if (sensitivity.equals("Medium")) {
+            return 2;
+        } else if (sensitivity.equals("High")) {
+            return 3;
+        }
+        return 0; //Returns off or 0 if there is not one of the four options above
+    }
     /**
     This just gets the count of how many flags are not turned off
      */
@@ -93,6 +137,7 @@ public class UserSettingsModel extends PredictionModel{
         }
         return count;
     }
+
 
 
     /**
