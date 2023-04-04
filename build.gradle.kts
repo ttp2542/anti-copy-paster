@@ -32,6 +32,8 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.9.2")
     testImplementation("org.mockito:mockito-inline:4.0.0")
     testImplementation("org.mockito:mockito-junit-jupiter:4.0.0")
+    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
+    testImplementation("org.powermock:powermock-module-junit4:2.0.9")
 
     // extract-method-metrics module inclusion
     implementation("$extractMethodProjectName:extract-method-metrics") {
