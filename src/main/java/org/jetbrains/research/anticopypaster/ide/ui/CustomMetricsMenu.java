@@ -61,7 +61,9 @@ public class CustomMetricsMenu extends DialogWrapper {
 
         // initialize file to read values from
         File file = new File(FILE_PATH);
+        System.out.println("Right before file checking");
         if (file.exists()) {
+            System.out.println("File Exists");
             firstTime = false;
             try (Scanner scanner = new Scanner(file)) {
                 //throw away first line
@@ -150,15 +152,15 @@ public class CustomMetricsMenu extends DialogWrapper {
     }
 
     public JComboBox<String> getKeywordsDropdown() {
-        return (JComboBox<String>) keywordsDropdown.getSelectedItem();
+        return keywordsDropdown;
     }
 
     public JComboBox<String> getSizeDropdown() {
-        return (JComboBox<String>) sizeDropdown.getSelectedItem();
+        return sizeDropdown;
     }
 
     public JComboBox<String> getComplexityDropdown() {
-        return (JComboBox<String>) complexityDropdown.getSelectedItem();
+        return complexityDropdown;
     }
 
     public String getKeywordsDropdownValue() {

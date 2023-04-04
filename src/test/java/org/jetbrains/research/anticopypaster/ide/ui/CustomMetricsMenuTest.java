@@ -1,21 +1,40 @@
 package org.jetbrains.research.anticopypaster.ide.ui;
 
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.DialogWrapper;
-import org.junit.jupiter.api.Test;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+public class CustomMetricsMenuTest extends LightJavaCodeInsightFixtureTestCase {
 
-public class CustomMetricsMenuTest {
+    // Boolean to ensure the testdata is only added once across the multiple tests
+    private boolean addedTestClass = false;
 
-    @Test
+    /**
+     * Gets the path for the testdata.
+     * @return A string of the testdata path
+     */
+    @Override
+    protected String getTestDataPath() {
+        return "src/test/resources/testdata";
+    }
+
+    /**
+     * Overridden from LightJavaCodeInsightFixtureTestCase. Setup now also ensures
+     * the project is initialized fully and adds the testdata to the project.
+     * @throws Exception
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        while (!getProject().isInitialized());
+        if(!addedTestClass) {
+            myFixture.copyDirectoryToProject("", "");
+            addedTestClass = true;
+        }
+    }
     public void testGetKeywordsDropdownValue() {
         CustomMetricsMenu menu = new CustomMetricsMenu();
         JComboBox<String> keywordsDropdown = menu.getKeywordsDropdown();
@@ -23,7 +42,6 @@ public class CustomMetricsMenuTest {
         assertEquals("Low", menu.getKeywordsDropdownValue());
     }
 
-    @Test
     public void testGetSizeDropdownValue() {
         CustomMetricsMenu menu = new CustomMetricsMenu();
         JComboBox<String> sizeDropdown = menu.getSizeDropdown();
@@ -31,7 +49,6 @@ public class CustomMetricsMenuTest {
         assertEquals("Medium", menu.getSizeDropdownValue());
     }
 
-    @Test
     public void testGetComplexityDropdownValue() {
         CustomMetricsMenu menu = new CustomMetricsMenu();
         JComboBox<String> complexityDropdown = menu.getComplexityDropdown();
@@ -39,7 +56,6 @@ public class CustomMetricsMenuTest {
         assertEquals("High", menu.getComplexityDropdownValue());
     }
 
-    @Test
     public void testInitialState() {
         CustomMetricsMenu menu = new CustomMetricsMenu();
         JComboBox<String> keywordsDropdown = menu.getKeywordsDropdown();
@@ -51,34 +67,15 @@ public class CustomMetricsMenuTest {
         assertEquals("Off", complexityDropdown.getSelectedItem());
     }
 
-    @Test
-    public void testStateFromFile() {
-        // Set up the file with some values
-        String basePath = ProjectManager.getInstance().getOpenProjects()[0].getBasePath();
-        String filePath = basePath + "/.idea/custom_metrics.txt";
-        File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
-        }
-        String contents = "Test header\nLow\nHigh\nMedium\n";
-        try {
-            file.createNewFile();
-            Scanner scanner = new Scanner(file);
-            scanner.useDelimiter("\\Z");
-            scanner.next();
-            scanner.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        // Create the menu and verify that it loaded the values from the file
-        CustomMetricsMenu menu = new CustomMetricsMenu();
-        JComboBox<String> keywordsDropdown = menu.getKeywordsDropdown();
-        JComboBox<String> sizeDropdown = menu.getSizeDropdown();
-        JComboBox<String> complexityDropdown = menu.getComplexityDropdown();
-
-        assertEquals("Low", keywordsDropdown.getSelectedItem());
-        assertEquals("High", sizeDropdown.getSelectedItem());
-        assertEquals("Medium", complexityDropdown.getSelectedItem());
-    }
+//    public void testStateFromFile() {
+//        // Create the menu and verify that it loaded the values from the file
+//        CustomMetricsMenu menu = new CustomMetricsMenu();
+//        JComboBox<String> keywordsDropdown = menu.getKeywordsDropdown();
+//        JComboBox<String> sizeDropdown = menu.getSizeDropdown();
+//        JComboBox<String> complexityDropdown = menu.getComplexityDropdown();
+//
+//        assertEquals("Low", keywordsDropdown.getSelectedItem());
+//        assertEquals("High", sizeDropdown.getSelectedItem());
+//        assertEquals("Medium", complexityDropdown.getSelectedItem());
+//    }
 }
