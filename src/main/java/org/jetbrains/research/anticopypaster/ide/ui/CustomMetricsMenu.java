@@ -1,13 +1,8 @@
 package org.jetbrains.research.anticopypaster.ide.ui;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -152,6 +147,18 @@ public class CustomMetricsMenu extends DialogWrapper {
 
         firstTime = false;
         init();
+    }
+
+    public JComboBox<String> getKeywordsDropdown() {
+        return (JComboBox<String>) keywordsDropdown.getSelectedItem();
+    }
+
+    public JComboBox<String> getSizeDropdown() {
+        return (JComboBox<String>) sizeDropdown.getSelectedItem();
+    }
+
+    public JComboBox<String> getComplexityDropdown() {
+        return (JComboBox<String>) complexityDropdown.getSelectedItem();
     }
 
     public String getKeywordsDropdownValue() {
