@@ -86,6 +86,9 @@ public class TestCustomModelController extends LightJavaCodeInsightFixtureTestCa
         assertEquals(customModelController.parseSettingString("Something"), 0, 0);
     }
 
+    /**
+     * Testing the changeSettings method to see if it correctly changes the value of the userSettingsModels sensitivities
+     */
     public void testChangeSettingsFromMediumToLow(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
 
@@ -129,7 +132,7 @@ public class TestCustomModelController extends LightJavaCodeInsightFixtureTestCa
         model.setKeywordsSensitivity(0);
         model.setSizeSensitivity(0);
 
-        //We are using this object to change the user model from medium (2) to low (1)
+        //We are using this object to change the user model from off (0) to high (3)
         customMetricsModel.setSizeDropdownValue("High");
         customMetricsModel.setComplexityDropdownValue("High");
         customMetricsModel.setKeywordsDropdownValue("High");

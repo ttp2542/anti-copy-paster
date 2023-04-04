@@ -10,15 +10,15 @@ import org.jetbrains.research.anticopypaster.utils.KeywordsMetrics;
 import org.jetbrains.research.anticopypaster.utils.SizeMetrics;
 import org.jetbrains.research.anticopypaster.utils.ComplexityMetrics;
 import org.jetbrains.research.anticopypaster.utils.Flag;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+
+import java.io.File;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
 
@@ -39,7 +39,7 @@ public class UserSettingsModelTest extends LightJavaCodeInsightFixtureTestCase {
     /**
     Inner class to mock a FeaturesVector, should only need buildArray() for this
      */
-    public class FeaturesVectorMock {
+    public static class FeaturesVectorMock {
         @Mock
         private FeaturesVector mockFeaturesVector;
         
@@ -64,7 +64,7 @@ public class UserSettingsModelTest extends LightJavaCodeInsightFixtureTestCase {
     /**
     Mock metrics gatherer needs to go here
     */ 
-    public class MetricsGathererMock {
+    public static class MetricsGathererMock {
         @Mock
         private MetricsGatherer mockMetricsGatherer;
         
@@ -101,6 +101,29 @@ public class UserSettingsModelTest extends LightJavaCodeInsightFixtureTestCase {
     public void testPredictEverythingNull(){
         assertEquals(model.predict(null), 0, 0);
     }
+
+//    public void testReadSensitivityFromFrontend(){
+//        //Mock the file and the scanner to make sure that each flag sensitivity will be set to low or 1
+//        File mockedFile = Mockito.mock(File.class);
+//        Scanner mockedScanner = Mockito.mock(Scanner.class);
+//        Mockito.when(mockedFile.exists()).thenReturn(true);
+//        Mockito.when(mockedScanner.nextLine()).thenReturn("low");
+//
+//        List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
+//
+//        float[] fvArrayValue1 = new float[78];
+//
+//        fvList.add(new FeaturesVectorMock(fvArrayValue1).getMock());
+//
+//        MetricsGathererMock mockMg = new MetricsGathererMock(fvList);
+//        //This method will make a call to readSensitivityFromFrontend which we are testing
+//        this.model.initMetricsGathererAndMetricsFlags(mockMg.getMock());
+//
+//        assertEquals(1, model.getComplexitySensitivity());
+//        assertEquals(1, model.getSizeSensitivity());
+//        assertEquals(1, model.getKeywordsSensitivity() );
+//
+//    }
 
     public void testPredictEverythingOff(){
         List<FeaturesVector> fvList = new ArrayList<FeaturesVector>();
