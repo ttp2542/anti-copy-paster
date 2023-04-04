@@ -24,19 +24,14 @@ public class SizeMetrics extends Flag{
     }
 
     /**
-    This takes metrics 1 and 12 from the array and gets the ratio
-    of size of fragment to size of enclosing method
+    This takes metric 12 from the array and gets size
+    of the enclosing method
      */
     private float getSizeMetricFromFV(FeaturesVector fv){
         if(fv != null){
             float[] fvArr = fv.buildArray();
-            //If the size of the enclosing method is 0 that would cause a
-            //divide by zero error, this will just skip making that calculation
-            //and return zero regardless of what size of the snippet is
-            if(fvArr[11] != (float)0){
-                lastCalculatedMetric = fvArr[0]/fvArr[11];
-                return lastCalculatedMetric;
-            }
+            lastCalculatedMetric = fvArr[0];
+            return lastCalculatedMetric;
         }
         lastCalculatedMetric = 0;
         return lastCalculatedMetric;
