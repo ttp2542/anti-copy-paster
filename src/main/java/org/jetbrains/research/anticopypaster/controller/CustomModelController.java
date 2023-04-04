@@ -10,7 +10,10 @@ public final class CustomModelController {
     private static final CustomModelController INSTANCE = new CustomModelController();
     private UserSettingsModel userSettingsModel;
 
-    private CustomModelController(){
+    /**
+     * For testing purposes this singleton constructor will be public
+     */
+    public CustomModelController(){
 
     }
 

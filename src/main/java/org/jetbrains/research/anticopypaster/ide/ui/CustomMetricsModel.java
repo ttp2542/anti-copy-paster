@@ -14,23 +14,20 @@ public class CustomMetricsModel {
         return this.keywordsDropdownValue;
     }
 
-    public String getKeywordsCheckboxValue(){
-        return this.keywordsCheckboxValue;
-    }
-
     public String getComplexityDropdownValue(){
         return this.complexityDropdownValue;
-    }
-
-    public String getComplexityCheckboxValue(){
-        return this.complexityCheckboxValue;
     }
 
     public String getSizeDropdownValue(){
         return this.sizeDropdownValue;
     }
 
-    public String getSizeCheckboxValue(){
-        return this.sizeCheckboxValue;
+    public void setKeywordsDropdownValue(String dropdownValue){
+        this.keywordsDropdownValue = dropdownValue;
     }
-}
+    public void setSizeDropdownValue(String dropdownValue){
+        this.sizeDropdownValue = dropdownValue;
+    }
+    public void setComplexityDropdownValue(String dropdownValue){
+        this.complexityDropdownValue = dropdownValue;
+    }}

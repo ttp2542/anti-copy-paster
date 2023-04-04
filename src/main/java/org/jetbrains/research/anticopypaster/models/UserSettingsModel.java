@@ -18,6 +18,8 @@ public class UserSettingsModel extends PredictionModel{
 
     private static final String FILE_PATH = ProjectManager.getInstance().getOpenProjects()[0]
             .getBasePath() + "/.idea/custom_metrics.txt";
+
+    private final int DEFAULT_SENSITIVITY = 2;
     private MetricsGatherer metricsGatherer;
 
     private CustomModelController customModelController = CustomModelController.getInstance();
@@ -38,6 +40,18 @@ public class UserSettingsModel extends PredictionModel{
             initMetricsGathererAndMetricsFlags(mg);
         }
         customModelController.setUserSettingsModel(this);
+    }
+
+    public int getSizeSensitivity(){
+        return this.sizeSensitivity;
+    }
+
+    public int getComplexitySensitivity(){
+        return this.complexitySensitivity;
+    }
+
+    public int getKeywordsSensitivity(){
+        return this.keywordsSensitivity;
     }
 
     /**
@@ -78,9 +92,9 @@ public class UserSettingsModel extends PredictionModel{
     */
     private void readSensitivitiesFromFrontend(){
         //Default values if the user has not yet specified flag values
-        int keywordsSensFromFrontend = 2;
-        int sizeSensFromFrontend = 2;
-        int complexitySensFromFrontend = 2;
+        int keywordsSensFromFrontend = DEFAULT_SENSITIVITY;
+        int sizeSensFromFrontend = DEFAULT_SENSITIVITY;
+        int complexitySensFromFrontend = DEFAULT_SENSITIVITY;
 
         //Grabs the sensitivity of the flags from the file if the file exists
         File file = new File(FILE_PATH);
@@ -89,11 +103,8 @@ public class UserSettingsModel extends PredictionModel{
                 //throw away first line
                 scanner.nextLine();
                 String keywordsDropdownValue = scanner.nextLine();
-                String keywordsCheckboxValue = scanner.nextLine();
                 String sizeDropdownValue = scanner.nextLine();
-                String sizeCheckboxValue = scanner.nextLine();
                 String complexityDropdownValue = scanner.nextLine();
-                String complexityCheckboxValue = scanner.nextLine();
 
                 keywordsSensFromFrontend = customModelController.parseSettingString(keywordsDropdownValue);
                 sizeSensFromFrontend = customModelController.parseSettingString(sizeDropdownValue);
@@ -124,8 +135,6 @@ public class UserSettingsModel extends PredictionModel{
         }
         return count;
     }
-
-
 
     /**
     Returns a value higher than 0.5 if the task satisfied the requirements
