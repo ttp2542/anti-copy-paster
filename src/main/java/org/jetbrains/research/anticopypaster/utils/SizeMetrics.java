@@ -24,7 +24,7 @@ public class SizeMetrics extends Flag{
     }
 
     /**
-    This takes metric 12 from the array and gets size
+    This takes metric 1 from the array and gets size
     of the enclosing method
      */
     private float getSizeMetricFromFV(FeaturesVector fv){
