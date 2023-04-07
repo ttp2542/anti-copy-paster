@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import org.jetbrains.research.anticopypaster.controller.CustomModelController;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 public class CustomMetricsMenuAction extends AnAction {
 
+    CustomModelController customModelController = CustomModelController.getInstance();
 
     public void actionPerformed(AnActionEvent e) {
         CustomMetricsMenu dialog = new CustomMetricsMenu();
@@ -25,6 +27,9 @@ public class CustomMetricsMenuAction extends AnAction {
             customMetricsModel.keywordsDropdownValue = keywordsDropdownValue;
             customMetricsModel.sizeDropdownValue = sizeDropdownValue;
             customMetricsModel.complexityDropdownValue = complexityDropdownValue;
+
+            //Send to the backend
+            this.customModelController.changeSettings(customMetricsModel);
 
             // initialize file to write values to
             Project p = ProjectManager.getInstance().getOpenProjects()[0];

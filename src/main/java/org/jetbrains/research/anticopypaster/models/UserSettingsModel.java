@@ -1,17 +1,28 @@
 package org.jetbrains.research.anticopypaster.models;
 
+import com.intellij.openapi.project.ProjectManager;
+import org.jetbrains.research.anticopypaster.controller.CustomModelController;
 import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
 import org.jetbrains.research.anticopypaster.utils.KeywordsMetrics;
 import org.jetbrains.research.anticopypaster.utils.SizeMetrics;
 import org.jetbrains.research.anticopypaster.utils.ComplexityMetrics;
 import org.jetbrains.research.anticopypaster.utils.Flag;
+
+import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class UserSettingsModel extends PredictionModel{
 
+    private static final String FILE_PATH = ProjectManager.getInstance().getOpenProjects()[0]
+            .getBasePath() + "/.idea/custom_metrics.txt";
+
+    private final int DEFAULT_SENSITIVITY = 2;
     private MetricsGatherer metricsGatherer;
+
+    private CustomModelController customModelController = CustomModelController.getInstance();
 
     private Flag keywordsMetrics;
     private Flag sizeMetrics;
@@ -23,11 +34,24 @@ public class UserSettingsModel extends PredictionModel{
 
     public UserSettingsModel(MetricsGatherer mg){
         //The metricsGatherer instantiation calls a function that can't be used
-        //outside of the context of an installed plugin, so in order to unit test
+        //outside the context of an installed plugin, so in order to unit test
         //our model, the metrics gatherer is passed in from the constructor
         if(mg != null){
             initMetricsGathererAndMetricsFlags(mg);
         }
+        customModelController.setUserSettingsModel(this);
+    }
+
+    public int getSizeSensitivity(){
+        return this.sizeSensitivity;
+    }
+
+    public int getComplexitySensitivity(){
+        return this.complexitySensitivity;
+    }
+
+    public int getKeywordsSensitivity(){
+        return this.keywordsSensitivity;
     }
 
     /**
@@ -63,18 +87,36 @@ public class UserSettingsModel extends PredictionModel{
     }    
 
     /**
-    Currently stubbed out to default to medium sens
-    This should ideally read in whatever the sensitivities are from the frontend,
-    the frontend 
+    Defaulted to medium if the user has not set up flag values,reads in
+     the sensitivities from the frontend file if the user has set values
     */
     private void readSensitivitiesFromFrontend(){
-        int sizeSensFromFrontend = 2;
-        int complexitySensFromFrontend = 2;
-        int keywordsSensFromFrontend = 2;
+        //Default values if the user has not yet specified flag values
+        int keywordsSensFromFrontend = DEFAULT_SENSITIVITY;
+        int sizeSensFromFrontend = DEFAULT_SENSITIVITY;
+        int complexitySensFromFrontend = DEFAULT_SENSITIVITY;
 
-        setComplexitySensitivity(complexitySensFromFrontend);
-        setSizeSensitivity(sizeSensFromFrontend);
+        //Grabs the sensitivity of the flags from the file if the file exists
+        File file = new File(FILE_PATH);
+        if (file.exists()) {
+            try (Scanner scanner = new Scanner(file)) {
+                //throw away first line
+                scanner.nextLine();
+                String keywordsDropdownValue = scanner.nextLine();
+                String sizeDropdownValue = scanner.nextLine();
+                String complexityDropdownValue = scanner.nextLine();
+
+                keywordsSensFromFrontend = customModelController.parseSettingString(keywordsDropdownValue);
+                sizeSensFromFrontend = customModelController.parseSettingString(sizeDropdownValue);
+                complexitySensFromFrontend = customModelController.parseSettingString(complexityDropdownValue);
+            } catch (FileNotFoundException ex) {
+                System.out.println(ex);
+            }
+        }
+
         setKeywordsSensitivity(keywordsSensFromFrontend);
+        setSizeSensitivity(sizeSensFromFrontend);
+        setComplexitySensitivity(complexitySensFromFrontend);
     }
 
     /**
@@ -93,7 +135,6 @@ public class UserSettingsModel extends PredictionModel{
         }
         return count;
     }
-
 
     /**
     Returns a value higher than 0.5 if the task satisfied the requirements
