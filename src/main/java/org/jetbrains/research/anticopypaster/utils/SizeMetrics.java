@@ -66,4 +66,12 @@ public class SizeMetrics extends Flag{
     public void logMetric(String filepath){
         logMetric(filepath, "Size");
     }
+
+    /**
+     * Easier to use logThresholds
+     * @param filepath path to the log file
+     */
+    public void logThresholds(String filepath){
+        logThresholds(filepath, "Size");
+    }
 }

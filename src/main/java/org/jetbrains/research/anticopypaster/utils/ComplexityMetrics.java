@@ -74,4 +74,12 @@ public class ComplexityMetrics extends Flag{
     public void logMetric(String filepath){
         logMetric(filepath, "Complexity");
     }
+
+    /**
+     * Easier to use logThresholds
+     * @param filepath path to the log file
+     */
+    public void logThresholds(String filepath){
+        logThresholds(filepath, "Complexity");
+    }
 }
