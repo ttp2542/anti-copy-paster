@@ -23,7 +23,13 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.apache.commons:commons-lang3:3.0")
     implementation("org.pmml4s:pmml4s_2.13:0.9.10")
-    implementation("org.tensorflow:tensorflow:1.15.0")
+    /**
+     * This file is commented out as it uses the TensorFlow API. By removing that dependency,
+     * the plugin will be a fifth of the size and much more lightweight, but this won't
+     * compile. It's been left here to allow for adding a feature to swap between models
+     * in the future.
+     */
+    // implementation("org.tensorflow:tensorflow:1.15.0")
 
     // Test dependencies
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")

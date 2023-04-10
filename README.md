@@ -25,6 +25,12 @@ The scripts and tools that were used for data gathering and model training could
 
 The tool validation and embedded models are available here: https://github.com/JetBrains-Research/extract-method-experiments.
 
+### TensorFlow Model
+
+The TensorFlow Model has been deactivated for this metrics based version of the plugin in order to make it smaller and more lightweight. In order to add back in the TensorFlowModel, the files and subdirectories in the TensorFlowModel directory need to be added to the `src/main/resources` folder.
+
+In addition, the `TensorflowModel.java` and `TensorflowNativeLibraryLoader.java` need to be uncommented. If you intend to add these back in, you should check out [this repository](https://github.com/JetBrains-Research/anti-copy-paster) where that version of the plugin is kept up to date. This is to ensure that none of the files have been updated since they've been commented out.
+
 ## Contacts
 
 If you have any questions or propositions, do not hesitate to contact Yaroslav Golubev at yaroslav.golubev@jetbrains.com.
