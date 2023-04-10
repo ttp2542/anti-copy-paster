@@ -184,12 +184,23 @@ public class UserSettingsModel extends PredictionModel{
     }
 
     /**
-     * This function logs all the pertinent metrics info
+     * This function logs all the pertinent metrics info for
+     * a copy/paste event
+     * @param filepath the filepath to the log file
      */
-    @Override
-    public void logInfo(String filepath){
+    public void logMetrics(String filepath){
         this.complexityMetrics.logMetric(filepath);
         this.keywordsMetrics.logMetric(filepath);
         this.sizeMetrics.logMetric(filepath);
+    }
+
+    /**
+     * This function logs all the metrics thresholds
+     * @param filepath the filepath to the log file
+     */
+    public void logThresholds(String filepath){
+        this.complexityMetrics.logThresholds(filepath);
+        this.keywordsMetrics.logThresholds(filepath);
+        this.sizeMetrics.logThresholds(filepath);
     }
 }

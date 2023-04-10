@@ -13,6 +13,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.extractMethod.ExtractMethodProcessor;
 import com.intellij.refactoring.extractMethod.PrepareFailedException;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.research.anticopypaster.AntiCopyPasterBundle;
 import org.jetbrains.research.anticopypaster.checkers.FragmentCorrectnessChecker;
@@ -26,10 +27,8 @@ import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
 import javax.swing.event.HyperlinkEvent;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.intellij.refactoring.extractMethod.ExtractMethodHandler.getProcessor;
@@ -47,19 +46,43 @@ public class RefactoringNotificationTask extends TimerTask {
             .getNotificationGroup("Extract Method suggestion");
     private final Timer timer;
     private PredictionModel model;
-    private boolean debugMetrics;
+    private final boolean debugMetrics = true;
+    private String logFilePath;
 
 
     public RefactoringNotificationTask(DuplicatesInspection inspection, Timer timer) {
         this.inspection = inspection;
         this.timer = timer;
+        if(debugMetrics && this.logFilePath == null){
+            var filepathHolder = new Object(){String filepath = "";};
+            // Using ProjectManager outside runReadAction causes issues,
+            // this allows us to get the location of the baseFilePath
+            ApplicationManager.getApplication().runReadAction(() -> {
+                Project p = ProjectManager.getInstance().getOpenProjects()[0];
+                String basePath = p.getBasePath();
+                filepathHolder.filepath = basePath +
+                        "/.idea/anticopypaster-refactoringSuggestionsLog.log";
+            });
+            this.logFilePath = filepathHolder.filepath;
+        }
     }
 
     private PredictionModel getOrInitModel() {
         PredictionModel model = this.model;
         if (model == null) {
             model = this.model = new UserSettingsModel(new MetricsGatherer());
-            this.debugMetrics = true;
+            if(debugMetrics){
+                UserSettingsModel settingsModel = (UserSettingsModel) model;
+                try(FileWriter fr = new FileWriter(logFilePath, true)){
+                    String timestamp =
+                            new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
+                    fr.write("\n-----------------------\nInitial Metric Thresholds: " +
+                            timestamp + "\n");
+                }catch(IOException ioe){
+
+                }
+                settingsModel.logThresholds(logFilePath);
+            }
         }
         return model;
     }
@@ -91,17 +114,13 @@ public class RefactoringNotificationTask extends TimerTask {
 
                     float prediction = model.predict(featuresVector);
                     if(debugMetrics){
-                        var filepathHolder = new Object(){String filepath = "";};
-                        ApplicationManager.getApplication().runReadAction(() -> {
-                            Project p = ProjectManager.getInstance().getOpenProjects()[0];
-                            String basePath = p.getBasePath();
-                            filepathHolder.filepath = basePath +
-                                    "/.idea/anticopypaster-refactoringSuggestionsLog.log";
-                        });
+                        UserSettingsModel settingsModel = (UserSettingsModel) model;
+                        try(FileWriter fr = new FileWriter(logFilePath, true)){
+                            String timestamp =
+                                    new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
 
-                        String filepath = filepathHolder.filepath;
-                        try(FileWriter fr = new FileWriter(filepath, true)){
-                            fr.write("\n-----------------------\nNEW COPY/PASTE EVENT:\nPASTED CODE:\n"
+                            fr.write("\n-----------------------\nNEW COPY/PASTE EVENT: "
+                                    + timestamp + "\nPASTED CODE:\n"
                                     + event.getText());
 
                             if(prediction > predictionThreshold){
@@ -113,7 +132,7 @@ public class RefactoringNotificationTask extends TimerTask {
                         }catch(IOException ioe){
 
                         }
-                        model.logInfo(filepath);
+                        settingsModel.logMetrics(logFilePath);
                     }
                     event.setReasonToExtract(AntiCopyPasterBundle.message(
                             "extract.method.to.simplify.logic.of.enclosing.method")); // dummy

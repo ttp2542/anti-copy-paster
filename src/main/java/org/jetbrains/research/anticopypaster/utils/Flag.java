@@ -118,4 +118,26 @@ public abstract class Flag{
      * @param filepath path to the log file
      */
     public abstract void logMetric(String filepath);
+
+    /**
+     * This function logs the thresholds of the metrics
+     * @param filepath path to the log file
+     * @param metricName the name of the metric category
+     */
+    protected void logThresholds(String filepath, String metricName){
+        try(FileWriter fr = new FileWriter(filepath, true)){
+            fr.write(metricName + " Thresholds: " + metricQ1 + ", " +
+                    metricQ2 + ", " + metricQ3 + "\n");
+        }catch(IOException ioe){
+
+        }
+    }
+
+    /**
+     * Abstract logThresholds method which is required to be implemented.
+     * This allows descendants to call the above logThresholds with the name
+     * of their metrics, and have outside classes only require filepath
+     * @param filepath path to the log file
+     */
+    public abstract void logThresholds(String filepath);
 }
