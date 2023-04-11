@@ -35,6 +35,10 @@ public class FlagTest {
         public void logMetric(String filepath){
             // Do nothing just lets tests go
         }
+        @Override
+        public void logThresholds(String filepath){
+            // Do nothing just lets tests go
+        }
     }
 
     private TestingFlag testFlag;
