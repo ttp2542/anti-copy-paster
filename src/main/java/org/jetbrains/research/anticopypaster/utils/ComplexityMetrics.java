@@ -1,6 +1,6 @@
 package org.jetbrains.research.anticopypaster.utils;
 
-import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
+import org.jetbrains.research.anticopypaster.metrics.features.FeaturesVector;
 
 import java.util.ArrayList;
 import java.util.Collections;

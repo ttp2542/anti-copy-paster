@@ -1,7 +1,7 @@
 package org.jetbrains.research.anticopypaster.utils;
 
 import com.intellij.testFramework.fixtures.*;
-import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
+import org.jetbrains.research.anticopypaster.metrics.features.FeaturesVector;
 import org.junit.jupiter.api.*;
 
 /**
