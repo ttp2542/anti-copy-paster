@@ -17,8 +17,6 @@ repositories {
     mavenCentral()
 }
 
-val extractMethodProjectName = "org.jetbrains.research.extractMethod"
-
 dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.apache.commons:commons-lang3:3.0")
@@ -40,13 +38,6 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:4.0.0")
     testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
     testImplementation("org.powermock:powermock-module-junit4:2.0.9")
-
-    // extract-method-metrics module inclusion
-    implementation("$extractMethodProjectName:extract-method-metrics") {
-        version {
-            branch = "master"
-        }
-    }
 }
 
 fun properties(key: String) = project.findProperty(key).toString()

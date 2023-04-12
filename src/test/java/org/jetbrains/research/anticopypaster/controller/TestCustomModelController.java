@@ -5,7 +5,7 @@ import org.jetbrains.research.anticopypaster.ide.ui.CustomMetricsModel;
 import org.jetbrains.research.anticopypaster.models.UserSettingsModel;
 import org.jetbrains.research.anticopypaster.models.UserSettingsModelTest;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
-import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
+import org.jetbrains.research.anticopypaster.metrics.features.FeaturesVector;
 import org.mockito.Mock;
 
 import java.util.ArrayList;

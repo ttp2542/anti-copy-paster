@@ -2,7 +2,7 @@ package org.jetbrains.research.anticopypaster.models;
 
 import com.intellij.openapi.project.ProjectManager;
 import org.jetbrains.research.anticopypaster.controller.CustomModelController;
-import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
+import org.jetbrains.research.anticopypaster.metrics.features.FeaturesVector;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
 import org.jetbrains.research.anticopypaster.utils.KeywordsMetrics;
 import org.jetbrains.research.anticopypaster.utils.SizeMetrics;

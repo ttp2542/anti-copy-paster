@@ -21,8 +21,8 @@ import org.jetbrains.research.anticopypaster.models.PredictionModel;
 import org.jetbrains.research.anticopypaster.models.UserSettingsModel;
 import org.jetbrains.research.anticopypaster.statistics.AntiCopyPasterUsageStatistics;
 import org.jetbrains.research.anticopypaster.utils.MetricsGatherer;
-import org.jetbrains.research.extractMethod.metrics.MetricCalculator;
-import org.jetbrains.research.extractMethod.metrics.features.FeaturesVector;
+import org.jetbrains.research.anticopypaster.metrics.MetricCalculator;
+import org.jetbrains.research.anticopypaster.metrics.features.FeaturesVector;
 
 import javax.swing.event.HyperlinkEvent;
 import java.io.FileWriter;
